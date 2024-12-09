@@ -71,33 +71,27 @@ fn part1_3(equations: &[Vec<u64>]) -> u64 {
 
 fn part1(equations: &[Vec<u64>]) -> u64 {
     let mut sum = 0;
-    let mut results = Vec::with_capacity(20);
 
     for eq in equations {
         println!("{eq:?}");
         let ops = eq.len() as u32 - 2; // Number of operators required
         // Upper bound permutation: (high - 1) is highest permutation
         // in lexiographical order
-        let high = 1u16 << ops;    
-        results.push(eq[1]);
+        let high = 1u16 << ops;
+        let mut result = eq[1];
         'perm_loop: for perm in 0..high {
-            let mut result = results.pop().unwrap(); // First operand
-            let mut ops1 = ops - results.len() as u32;
-            for opi in (2 + results.len())..eq.len() {
-                results.push(result);
+            let mut ops1 = ops;
+            for opi in 2..eq.len() {
                 ops1 -= 1;
                 match (perm >> ops1) & 1 {
                     0 => result += eq[opi],
                     1 => result *= eq[opi],
                     _ => unreachable!("perm >> ops1 should shift `first`(perm is an ops-bit number) bit to LSB")
                 }
-                 // if result > eq[0] { continue 'perm_loop; }
+                if result > eq[0] { continue 'perm_loop; }
             }
-            println!("Perm {:#w$b} {}", perm, result == eq[0], w = ops as usize + 2);
             if result == eq[0] { sum += eq[0]; break; }
-            else if (perm & 1) == 1 { results.pop(); }
         }
-        results.clear();
     }
 
     sum
