@@ -8,7 +8,6 @@ fn main() {
             .collect()
     }).collect();
     println!("Answer is: {}", part1_2(&equations));
-    
 }
 
 use std::{hint::black_box, time::Instant};
@@ -57,7 +56,6 @@ fn part1_3(equations: &[Vec<u64>]) -> u64 {
                 if res == target { sum += target; break; }
                 continue;
             }
-
             let operand = eq[idx as usize];
             // Could prune maybe
             stack.push((idx + 1, res + operand));
