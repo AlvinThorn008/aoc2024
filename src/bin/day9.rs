@@ -63,45 +63,45 @@ fn sum_k_to(k: usize, count: u32) -> usize {
 }
 
 
-// fn part2(data: &mut [u8]) -> usize {
-    // let mut front_idx = 1; // Space idx
-    // let mut back_idx = ((data.len() - 1) / 2) * 2; // File idx
-    // let mut checksum = 0;
-    // let mut position = data[0] as usize; // First file never moves
+fn part2(data: &mut [u8]) -> usize {
+    let mut front_idx = 1; // Space idx
+    let mut back_idx = ((data.len() - 1) / 2) * 2; // File idx
+    let mut checksum = 0;
+    let mut position = data[0] as usize; // First file never moves
 
-    // loop {
-    //     let file_size = data[back_idx];
-    //     let space = data[front_idx];
-    //     let prev_front_idx = front_idx;
+    loop {
+        let file_size = data[back_idx];
+        let space = data[front_idx];
+        let prev_front_idx = front_idx;
 
-    //     if space > 0 {
-    //         let id = back_idx / 2; // even file idx / 2 = file id
-    //         if space == file_size {
-    //             checksum += id * sum_k_to(position, file_size as u32);
-    //             position += file_size as usize;
-    //             data[front_idx] -= file_size;
-    //             back_idx -= 2 // next file to move
-    //         } else {
-    //             position += space as usize;
-    //         }
-    //     }
+        if space > 0 {
+            let id = back_idx / 2; // even file idx / 2 = file id
+            if space == file_size {
+                checksum += id * sum_k_to(position, file_size as u32);
+                position += file_size as usize;
+                data[front_idx] -= file_size;
+                back_idx -= 2 // next file to move
+            } else {
+                position += space as usize;
+            }
+        }
 
-    //     // Space has just been completely filled or space was empty
-    //     // so calculate checksum for next file (ahead of space)
-    //     if space == file_size || space == 0 {
-    //         front_idx += 2; // move to next space (not performed in greater | equal branch)
-    //         let next_file_size = data[prev_front_idx + 1];
-    //         let id = (prev_front_idx + 1) / 2;      // Next file id
-    //         checksum += id * sum_k_to(position, next_file_size as u32);
-    //         position += next_file_size as usize;
-    //     }
+        // Space has just been completely filled or space was empty
+        // so calculate checksum for next file (ahead of space)
+        if space == file_size || space == 0 {
+            front_idx += 2; // move to next space (not performed in greater | equal branch)
+            let next_file_size = data[prev_front_idx + 1];
+            let id = (prev_front_idx + 1) / 2;      // Next file id
+            checksum += id * sum_k_to(position, next_file_size as u32);
+            position += next_file_size as usize;
+        }
 
-    //     // Next space is ahead of next file so no more spaces to fill
-    //     if front_idx > back_idx { break; }
-    // }
+        // Next space is ahead of next file so no more spaces to fill
+        if front_idx > back_idx { break; }
+    }
 
-    // checksum
-// }
+    checksum
+}
 
 
 // Limited to u8 sized file IDs
